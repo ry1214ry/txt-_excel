@@ -8,40 +8,55 @@
 </head>
 <body>
 <main class="page-shell">
-    <div class="message-stack" th:if="${errorMessage != null or successMessage != null}">
-        <div class="alert" th:if="${errorMessage}" th:text="${errorMessage}"></div>
-        <div class="success" th:if="${successMessage}" th:text="${successMessage}"></div>
-    </div>
-
     <section class="upload-card">
-        <h2 style="text-align: center">TXT FILE TO XLSX FILE Converter</h2>
-        <p class="subtitle " style="text-align: center">Upload your TXT file and convert it to Excel</p>
+        <div class="card-intro">
+            <p class="eyebrow">TXT to XLSX</p>
+            <h1>Turn plain text into an Excel workbook</h1>
+            <p class="subtitle">Upload a text file and the converter will save the spreadsheet into your export folder.</p>
+        </div>
+
+        <div class="message-stack" th:if="${errorMessage != null or successMessage != null}">
+            <div class="alert" th:if="${errorMessage}" th:text="${errorMessage}"></div>
+            <div class="success" th:if="${successMessage}" th:text="${successMessage}"></div>
+        </div>
 
         <form method="post" enctype="multipart/form-data" action="/convert" class="upload-form">
             <label class="file-picker" for="file">
-                <span class="file-label">Choose TXT file</span>
+                <span class="file-label">Choose a TXT file</span>
+                <span class="file-hint">Only plain text files with the <strong>.txt</strong> extension are accepted.</span>
                 <input id="file" name="file" type="file" accept=".txt,text/plain" required>
             </label>
 
-            <button type="submit">Convert to Excel</button>
+            <button class="submit-button" type="submit">Convert to Excel</button>
         </form>
 
-        <div class="notes">
-            <p>Accepted format: <strong>.txt</strong></p>
-            <p>Output format: <strong>.xlsx</strong></p>
-        </div>
+        <section class="meta-grid" aria-label="Conversion details">
+            <article class="info-tile">
+                <p class="info-label">Accepted input</p>
+                <strong>.txt</strong>
+            </article>
+            <article class="info-tile">
+                <p class="info-label">Generated output</p>
+                <strong>.xlsx</strong>
+            </article>
+        </section>
 
         <section class="download-box">
-            <p class="download-label">Result</p>
+            <div class="result-header">
+                <p class="download-label">Latest result</p>
+                <span class="status-pill"
+                      th:classappend="${outputFileName != null} ? ' status-pill-ready' : ''"
+                      th:text="${outputFileName != null} ? 'Ready' : 'Waiting'">Waiting</span>
+            </div>
 
-            <p th:if="${outputFileName != null}">
+            <p class="result-text" th:if="${outputFileName != null}">
                 File name: <strong th:text="${outputFileName}"></strong>
             </p>
 
             <p class="download-path" th:if="${savedFilePath != null}"
                th:text="|Saved automatically to: ${savedFilePath}|"></p>
 
-            <p th:if="${outputFileName == null}"
+            <p class="result-text" th:if="${outputFileName == null}"
                th:text="|Convert a TXT file first. The Excel file will be created automatically in ${exportDirectoryDisplay}.|">
                 Convert a TXT file first. The Excel file will be created automatically.
             </p>
