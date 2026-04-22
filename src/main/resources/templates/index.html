@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TXT to Excel</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}" href="/css/app.css">
+</head>
+<body>
+<main class="page-shell">
+    <div class="message-stack" th:if="${errorMessage != null or successMessage != null}">
+        <div class="alert" th:if="${errorMessage}" th:text="${errorMessage}"></div>
+        <div class="success" th:if="${successMessage}" th:text="${successMessage}"></div>
+    </div>
+
+    <section class="upload-card">
+        <h2 style="text-align: center">TXT FILE TO XLSX FILE Converter</h2>
+        <p class="subtitle " style="text-align: center">Upload your TXT file and convert it to Excel</p>
+
+        <form method="post" enctype="multipart/form-data" action="/convert" class="upload-form">
+            <label class="file-picker" for="file">
+                <span class="file-label">Choose TXT file</span>
+                <input id="file" name="file" type="file" accept=".txt,text/plain" required>
+            </label>
+
+            <button type="submit">Convert to Excel</button>
+        </form>
+
+        <div class="notes">
+            <p>Accepted format: <strong>.txt</strong></p>
+            <p>Output format: <strong>.xlsx</strong></p>
+        </div>
+
+        <section class="download-box">
+            <p class="download-label">Result</p>
+
+            <p th:if="${outputFileName != null}">
+                File name: <strong th:text="${outputFileName}"></strong>
+            </p>
+
+            <p class="download-path" th:if="${savedFilePath != null}"
+               th:text="|Saved automatically to: ${savedFilePath}|"></p>
+
+            <p th:if="${outputFileName == null}"
+               th:text="|Convert a TXT file first. The Excel file will be created automatically in ${exportDirectoryDisplay}.|">
+                Convert a TXT file first. The Excel file will be created automatically.
+            </p>
+        </section>
+    </section>
+</main>
+</body>
+</html>
